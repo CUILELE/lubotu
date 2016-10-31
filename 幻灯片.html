@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			#box{
+				width: 700px;
+				height: 280px;
+				margin: 20px auto;
+				position: relative;
+				border: 5px solid palegoldenrod;
+				overflow: hidden;
+			}
+			#ul{
+				padding: 0;
+				list-style: none;
+				position:absolute;
+				left: 0;
+				top: 0;
+				margin: 0;
+				z-index: 1;
+			}
+			li{
+				position: absolute;
+				left: 0;
+				top: 0;
+				opacity: 0;
+				z-index: 0;
+			}
+			a{
+				position: absolute;
+				width: 40px;
+				height: 40px;
+				background: white;
+				text-decoration: none;
+				opacity: 0.5;
+				text-align: center;
+				line-height: 40px;
+				font-size: 30px;
+				z-index: 3;
+			}
+			a:hover{
+				opacity: 1;
+			}
+			.left{
+				left: -40px;
+				top: 120px;
+			}
+			.right{
+				right: -40px;
+				top: 120px;
+			}
+			.nav{
+				width: 100%;
+				height: 50px;
+				background: white;
+				background: rgba(255, 255, 255, 0.5);
+				position: absolute;
+				bottom: -50px;
+				left: 0;
+				z-index: 3;
+				text-align: center;
+			}
+			img{
+				vertical-align: top;
+			}
+			.active{
+				opacity: 1;
+			}
+			span{
+				width: 25px;
+				height:25px;
+				background: #ddd;
+				display: inline-block;
+				margin-left:5px ;
+				margin-top: 15px;
+				transition: 1s;
+			}
+			span:hover{
+				background: red;
+			}
+			.active{
+				background: red;
+			}
+		</style>
+	</head>
+	<script src="startMove.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		window.onload = function (){
+			var ul = document.getElementById('ul')
+			var box = document.getElementById('box')
+			var nav = box.getElementsByTagName('nav')[0];
+			var as = box.getElementsByTagName('a');
+			var lis = box.getElementsByTagName('li');
+			var spans = box.getElementsByTagName('span');
+			var str = '';
+			var nub= 0;
+			var zIndex = 1;
+			
+			for(var i=0;i<lis.length;i++){
+				str += '<span></span>'
+			}
+			nav.innerHTML = str;
+			spans[0].className = 'active'
+			box.onmouseover = function(){
+				startMove(nav,"bottom",400,0,"easeOut");
+				startMove(as[0],'left',400,0,"easeOut");
+				startMove(as[1],'right',400,0,"easeOut");
+			}
+			box.onmouseout = function(){
+				startMove(nav,"bottom",400,-50,"easeOut");
+				startMove(as[0],'left',400,-40,"easeOut");
+				startMove(as[1],'right',400,-40,"easeOut");
+			}
+			as[1].onclick = function (){
+				zIndex++;
+				spans[nub].className = '';
+				startMove(lis[nub],"opacity",500,0,"easeOut");
+				nub++;
+				if(nub>spans.length-1){
+					nub=0
+				}
+				spans[nub].className = 'active';
+				startMove(lis[nub],"opacity",500,100,"easeOut")
+				lis[nub].style.zIndex = zIndex;
+			}
+			as[0].onclick = function (){
+				zIndex++;
+				spans[nub].className = '';
+				startMove(lis[nub],"opacity",500,0,"easeOut");
+				nub--;
+				if(nub<0){
+					nub=lis.length-1
+				}
+				spans[nub].className = 'active';
+				startMove(lis[nub],"opacity",500,100,"easeOut")
+				lis[nub].style.zIndex = zIndex;
+			}
+			for(var i=0;i<spans.length;i++){
+				spans[i].index = i;
+				spans[i].onmouseover = function(){
+					zIndex++;
+					spans[nub].className = '';
+					startMove(lis[nub],"opacity",500,0,"easuOut")
+					nub = this.index;
+					startMove(lis[nub],"opacity",500,100,"easeOut")
+					lis[nub].style.zIndex = zIndex;
+					spans[nub].className = 'active';
+				}
+			}
+			
+		}
+	</script>
+	<body>
+		<div id="box">
+			<ul id="ul">
+				<li class="active"><img src="img2/img1.jpg"/></li>
+				<li><img src="img2/img2.jpg"/></li>
+				<li><img src="img2/img3.jpg"/></li>
+				<li><img src="img2/img4.jpg"/></li>
+				<li><img src="img2/img5.jpg"/></li>
+				<li><img src="img2/img6.jpg"/></li>
+			</ul>
+			<nav class="nav"></nav>
+			<a href="javascript:;" class="left">&lt;</a>
+			<a href="javascript:;" class="right">&gt;</a>
+		</div>
+	</body>
+</html>
